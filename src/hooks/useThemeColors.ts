@@ -1,11 +1,11 @@
-import useColorScheme from "../hooks/useColorScheme"
-import {colors as themeColors}  from '../themes/colors'
+import useColorScheme from '../hooks/useColorScheme';
+import { colors as themeColors } from '../themes/colors';
 
 const useThemeColors = () => {
-  const colorScheme = useColorScheme()
-  const colors = themeColors[colorScheme]
+    const colorScheme = useColorScheme();
+    const colors = themeColors[colorScheme];
 
-  return colors
-}
+    return colors;
+};
 
-export default useThemeColors
+export default useThemeColors;
