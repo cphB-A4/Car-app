@@ -2,6 +2,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from '../screens/LoginScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import { AuthStackParams } from './types';
+import React from 'react';
 
 const AuthenticationStackNavigator = () => {
   const AuthStack = createStackNavigator<AuthStackParams>();

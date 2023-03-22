@@ -1,3 +1,4 @@
+import React from 'react';
 import { SafeAreaView, Text, View } from 'react-native';
 import useThemeColors from '../hooks/useThemeColors';
 import { outerContainer } from '../themes/shared';

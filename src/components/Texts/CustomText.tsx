@@ -1,3 +1,4 @@
+import React from 'react';
 import { FunctionComponent } from 'react';
 import { Text, StyleSheet } from 'react-native';
 import useThemeColors from '../../hooks/useThemeColors';

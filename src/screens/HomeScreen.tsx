@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useEffect } from 'react';
 import { SafeAreaView, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
-import { StackParams } from '../../App';
+import { RootStackStackParams } from '../routes/types';
 import BigText from '../components/Texts/BigText';
 import SmallText from '../components/Texts/SmallText';
 import useThemeColors from '../hooks/useThemeColors';
@@ -11,10 +11,11 @@ import LottieView from 'lottie-react-native';
 import RegularText from '../components/Texts/RegularText';
 import CustomText from '../components/Texts/CustomText';
 import Heading from '../components/Texts/Heading';
+import React from 'react';
 
 const HomeScreen = () => {
     //NOTE: måske NativeStackNavigationProp
-    const navigation = useNavigation<StackNavigationProp<StackParams>>();
+    const navigation = useNavigation<StackNavigationProp<RootStackStackParams>>();
     const colors = useThemeColors();
     return (
       
