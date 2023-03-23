@@ -20,8 +20,12 @@ const RootStackNavigator = () => {
         tabBarActiveTintColor: globalStyle.primary.color,
         headerShown: false,
         tabBarInactiveBackgroundColor: colors.background,
-        tabBarActiveBackgroundColor: colors.background
+        tabBarActiveBackgroundColor: colors.background,
+        tabBarStyle: {
+            backgroundColor: colors.background,
+        }
     }}
+    
 >
     <Stack.Screen
         options={{

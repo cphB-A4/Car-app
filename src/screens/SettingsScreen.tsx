@@ -1,19 +1,17 @@
 import React from 'react';
-import { SafeAreaView, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { supabase } from '../api/InitSupabse';
 import AppButton from '../components/AppButton';
 import useThemeColors from '../hooks/useThemeColors';
 import { outerContainer } from '../themes/shared';
+import { CustomSafeAreaView } from '../utils/CustomSafeAreaView';
 
 const SettingsScreen = () => {
     const colors = useThemeColors();
     return (
-        <SafeAreaView style={{backgroundColor: colors.background}}>
+        <CustomSafeAreaView>
             <View
-                style={[
-                    outerContainer.container,
-                    { backgroundColor: colors.background }
-                ]}
+                style={ outerContainer.container}
             >
                 <Text style={{ color: colors.text }}>
                     Hello SettingsScreen!!
@@ -23,7 +21,7 @@ const SettingsScreen = () => {
     Logout
 </AppButton>
             </View>
-        </SafeAreaView>
+            </CustomSafeAreaView>
     );
 };
 

@@ -7,6 +7,7 @@ import { Alert, StyleSheet, View, Button, TextInput } from 'react-native'
 import { supabase } from '../api/InitSupabse';
 import { outerContainer } from '../themes/shared';
 import AppButton from '../components/AppButton';
+import { CustomSafeAreaView } from '../utils/CustomSafeAreaView';
 
 
 export default function LoginScreen() {
@@ -38,10 +39,8 @@ export default function LoginScreen() {
   }
 
   return (
-    <View  style={[
-        outerContainer.container,
-        { backgroundColor: colors.background }
-    ]}>
+    <CustomSafeAreaView>
+    <View  style={outerContainer.container}>
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <TextInput
           style={styles.inputField}
@@ -68,6 +67,7 @@ export default function LoginScreen() {
       <AppButton disabled={loading} onPress={() => signUpWithEmail()}>Sign up</AppButton>
       </View>
     </View>
+    </CustomSafeAreaView>
   )
 }
 
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     paddingBottom: 8,
     borderRadius: 10,
-    padding: 10
+    padding: 10,
   },
   verticallySpaced: {
     paddingTop: 8,

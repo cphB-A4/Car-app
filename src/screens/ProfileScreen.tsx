@@ -1,12 +1,13 @@
 import React from 'react';
-import { SafeAreaView, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import useThemeColors from '../hooks/useThemeColors';
 import { outerContainer } from '../themes/shared';
+import { CustomSafeAreaView } from '../utils/CustomSafeAreaView';
 
 const ProfileScreen = () => {
     const colors = useThemeColors();
     return (
-        <SafeAreaView>
+        <CustomSafeAreaView>
             <View
                 style={[
                     outerContainer.container,
@@ -15,7 +16,7 @@ const ProfileScreen = () => {
             >
                 <Text style={{ color: colors.text }}>Hello Profile!!</Text>
             </View>
-        </SafeAreaView>
+        </CustomSafeAreaView>
     );
 };
 

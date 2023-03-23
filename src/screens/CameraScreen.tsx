@@ -1,21 +1,19 @@
 import React from 'react';
-import { SafeAreaView, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import useThemeColors from '../hooks/useThemeColors';
 import { outerContainer } from '../themes/shared';
+import { CustomSafeAreaView } from '../utils/CustomSafeAreaView';
 
 const CameraScreen = () => {
     const colors = useThemeColors();
     return (
-        <SafeAreaView>
+        <CustomSafeAreaView>
             <View
-                style={[
-                    outerContainer.container,
-                    { backgroundColor: colors.background }
-                ]}
+                style={outerContainer.container}
             >
                 <Text style={{ color: colors.text }}>Hello Camera!!</Text>
             </View>
-        </SafeAreaView>
+            </CustomSafeAreaView>
     );
 };
 

@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useEffect } from 'react';
-import { SafeAreaView, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { RootStackStackParams } from '../routes/types';
 import BigText from '../components/Texts/BigText';
 import SmallText from '../components/Texts/SmallText';
@@ -12,18 +12,16 @@ import RegularText from '../components/Texts/RegularText';
 import CustomText from '../components/Texts/CustomText';
 import Heading from '../components/Texts/Heading';
 import React from 'react';
+import { CustomSafeAreaView } from '../utils/CustomSafeAreaView';
 
 const HomeScreen = () => {
     //NOTE: måske NativeStackNavigationProp
     const navigation = useNavigation<StackNavigationProp<RootStackStackParams>>();
     const colors = useThemeColors();
     return (
-      
+      <CustomSafeAreaView>
             <View
-                style={[
-                    outerContainer.container,
-                    { backgroundColor: colors.background }
-                ]}
+                style={outerContainer.container}
             >
               <View style={styles.headerSection}>
                
@@ -52,6 +50,7 @@ const HomeScreen = () => {
       </View>
       <Heading>Your favourite cars</Heading>
             </View>
+            </CustomSafeAreaView>
        
     );
 };
@@ -85,7 +84,6 @@ justifyContent: 'space-between'
     width: '60%',
     fontWeight: 'bold'
   }
-  
 });
 
 

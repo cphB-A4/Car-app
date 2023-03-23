@@ -6,8 +6,12 @@ import * as SplashScreen from 'expo-splash-screen'
 import { useEffect } from 'react';
 import AuthenticationStackNavigator from './src/routes/AuthenticationStackNavigator';
 import { UserContextProvider } from './src/contexts/UserContext';
+import { StatusBar } from 'expo-status-bar';
+import useColorScheme from './src/hooks/useColorScheme';
 
 const App = () => {
+  const mode = useColorScheme();
+  
   const [fontsLoaded] = useFonts({
     'Inter-Black': require('./assets/fonts/Inter-Black.otf'),
   });
@@ -19,7 +23,7 @@ const App = () => {
     }
     prepare();
   },[])
-  
+
 if(!fontsLoaded){
   return undefined;
 } else {
@@ -30,6 +34,7 @@ if(!fontsLoaded){
       <UserContextProvider>
         <NavigationContainer>
           <AuthenticationStackNavigator />
+          <StatusBar style={mode === 'light' ? 'dark' : 'light'}/>
       </NavigationContainer>
     </UserContextProvider>
     );
