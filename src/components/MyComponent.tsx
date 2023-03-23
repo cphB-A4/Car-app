@@ -1,6 +1,6 @@
 // MyComponent.tsx
 
-import React, { useContext } from 'react';
+import React from 'react';
 import { Text } from 'react-native';
 
 const MyComponent = () => {
