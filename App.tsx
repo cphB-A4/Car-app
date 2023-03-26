@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import 'react-native-gesture-handler';
 import { useFonts } from 'expo-font';
@@ -8,6 +8,8 @@ import AuthenticationStackNavigator from './src/routes/AuthenticationStackNaviga
 import { UserContextProvider } from './src/contexts/UserContext';
 import { StatusBar } from 'expo-status-bar';
 import useColorScheme from './src/hooks/useColorScheme';
+import { store } from './src/store/store'
+import { Provider } from 'react-redux'
 
 const App = () => {
   const mode = useColorScheme();
@@ -31,12 +33,14 @@ if(!fontsLoaded){
 }
 
     return (
+      <Provider store={store}>
       <UserContextProvider>
         <NavigationContainer>
           <AuthenticationStackNavigator />
           <StatusBar style={mode === 'light' ? 'dark' : 'light'}/>
       </NavigationContainer>
     </UserContextProvider>
+    </Provider>
     );
 };
 

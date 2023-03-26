@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { useEffect, useState } from 'react';
+import { View, StyleSheet, Alert } from 'react-native';
 import { RootStackStackParams } from '../routes/types';
 import BigText from '../components/Texts/BigText';
 import SmallText from '../components/Texts/SmallText';
@@ -13,11 +13,34 @@ import CustomText from '../components/Texts/CustomText';
 import Heading from '../components/Texts/Heading';
 import React from 'react';
 import { CustomSafeAreaView } from '../utils/CustomSafeAreaView';
+import LoadingAnimation from '../components/LoadingAnimation';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { setLoading, setError, clearError } from '../store/slices/view';
 
 const HomeScreen = () => {
     //NOTE: måske NativeStackNavigationProp
     const navigation = useNavigation<StackNavigationProp<RootStackStackParams>>();
     const colors = useThemeColors();
+    const dispatch = useAppDispatch();
+    const viewState = useAppSelector((state) => state.viewState)
+
+    useEffect(() => {
+      dispatch(setLoading(true))
+      const fetchData = () => {
+        setTimeout(() => {
+          dispatch(setLoading(false))
+        }, 3000); // simulate a delay of 3 seconds
+      };
+  
+      fetchData();
+    }, []);
+
+   
+    if(viewState.loading){
+      return (<LoadingAnimation/>)
+    }
+
+
     return (
       <CustomSafeAreaView>
             <View

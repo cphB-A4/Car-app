@@ -16,7 +16,10 @@ const SettingsScreen = () => {
                 <Text style={{ color: colors.text }}>
                     Hello SettingsScreen!!
                 </Text>
-                <AppButton disabled={false} onPress={async ()=> await supabase.auth.signOut()
+                <AppButton disabled={false} onPress={async ()=> {
+                    const {error} = await supabase.auth.signOut()
+                    console.log(error);
+                }
 }>
     Logout
 </AppButton>
