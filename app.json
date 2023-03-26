@@ -23,6 +23,14 @@
         },
         "web": {
             "favicon": "./assets/favicon.png"
-        }
+        },
+        "plugins": [
+            [
+              "expo-camera",
+              {
+                "cameraPermission": "Allow Scan Cars to access your camera."
+              }
+            ]
+          ]
     }
 }
