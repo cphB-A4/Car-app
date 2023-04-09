@@ -6,15 +6,28 @@ import { globalStyle, outerContainer } from '../themes/shared';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import UploadCarScreen from '../screens/UploadCarScreen';
 import CameraScreen from '../screens/CameraScreen';
 import SettingsScreen from '../screens/SettingsScreen';
-import { RootStackStackParams } from './types';
+import { CameraStackParams, RootStackStackParams } from './types';
+import { createStackNavigator } from '@react-navigation/stack';
 
 const RootStackNavigator = () => {
   const colors = useThemeColors();
-  const Stack = createBottomTabNavigator<RootStackStackParams>();
+  const Tab = createBottomTabNavigator<RootStackStackParams>();
+  const CameraStack = createStackNavigator<CameraStackParams>();
+
+  const CameraScreenStack = () => {
+    return (
+        <CameraStack.Navigator initialRouteName='Camera'>
+            <CameraStack.Screen name='Camera' component={CameraScreen} options={{headerShown: false}} />
+            <CameraStack.Screen name='UploadCar' component={UploadCarScreen} options={{headerShown: true}} />
+        </CameraStack.Navigator>
+    )
+  }
+
   return (
-    <Stack.Navigator
+    <Tab.Navigator
     initialRouteName={'Home'}
     screenOptions={{
         tabBarActiveTintColor: globalStyle.primary.color,
@@ -27,7 +40,7 @@ const RootStackNavigator = () => {
     }}
     
 >
-    <Stack.Screen
+    <Tab.Screen
         options={{
             tabBarLabel: 'Home',
             tabBarIcon: ({ color, size }) => (
@@ -41,7 +54,7 @@ const RootStackNavigator = () => {
         name="Home"
         component={HomeScreen}
     />
-    <Stack.Screen
+    <Tab.Screen
         name="Profile"
         component={ProfileScreen}
         options={{
@@ -55,9 +68,9 @@ const RootStackNavigator = () => {
             )
         }}
     />
-    <Stack.Screen
-        name="Camera"
-        component={CameraScreen}
+    <Tab.Screen
+        name="CameraStack"
+        component={CameraScreenStack}
         options={{
             tabBarLabel: 'Camera',
             tabBarIcon: ({ color, size }) => (
@@ -69,7 +82,7 @@ const RootStackNavigator = () => {
             )
         }}
     />
-    <Stack.Screen
+    <Tab.Screen
         name="Settings"
         component={SettingsScreen}
         options={{
@@ -83,7 +96,8 @@ const RootStackNavigator = () => {
             )
         }}
     />
-</Stack.Navigator>
+     
+</Tab.Navigator>
   );
 };
 

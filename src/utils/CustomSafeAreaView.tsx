@@ -16,7 +16,7 @@ export const CustomSafeAreaView = ({ children }: SafeAreaViewProps) => {
     container: {
       backgroundColor: colors.background,
       flex: 1,
-      paddingBottom: insets.bottom,
+     // paddingBottom: insets.bottom,
       paddingTop: insets.top
     }
   })

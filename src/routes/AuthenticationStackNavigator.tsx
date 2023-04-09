@@ -32,7 +32,6 @@ const AuthenticationStackNavigator = () => {
 };
   return (
       <>
-        {/*Loading spinner with lottie animation goes here if loading state is true. If loading is false renderContent*/}
         <>{renderContent()}</>
       </>
   );

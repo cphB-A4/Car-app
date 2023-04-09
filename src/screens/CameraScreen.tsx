@@ -1,13 +1,20 @@
 import React, { useState, useRef } from 'react';
-import { Text, TouchableOpacity, View, StyleSheet, Button } from 'react-native';
+import { Text, TouchableOpacity, View, StyleSheet, Button, Image } from 'react-native';
 import useThemeColors from '../hooks/useThemeColors';
 import { outerContainer } from '../themes/shared';
 import { CustomSafeAreaView } from '../utils/CustomSafeAreaView';
 import { Camera, CameraType } from 'expo-camera';
+import SmallText from '../components/Texts/SmallText';
+import AppButton from '../components/AppButton';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CameraStackParams, RootStackStackParams } from '../routes/types';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-const CameraScreen = () => {
+type Props = NativeStackScreenProps<CameraStackParams, 'Camera'>
+const CameraScreen = ({navigation}: Props) => {
     const colors = useThemeColors();
-
+    //const navigation = useNavigation<StackNavigationProp<RootStackStackParams>>();
     const [type, setType] = useState(CameraType.back);
     const [permission, requestPermission] = Camera.useCameraPermissions();
     const [showCamera, setShowCamera] = useState(true);
@@ -37,7 +44,6 @@ const CameraScreen = () => {
 
     const takePhoto = async () => {
         if(cameraRef.current){
-            console.log('in take picture')
         
         try {
             let photo = await cameraRef.current.takePictureAsync({
@@ -51,8 +57,10 @@ const CameraScreen = () => {
     } 
   
     return (
+      <CustomSafeAreaView>
       <View style={styles.container}>
         {showCamera ? (
+          <View style={styles.cameraContainer}>
  <Camera style={styles.camera} type={type} ref={cameraRef}>
  <View style={styles.buttonContainer}>
    <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
@@ -63,26 +71,52 @@ const CameraScreen = () => {
        if(r){
            setImage(r.uri)
        }
-      
-       console.log(r);
+       setShowCamera(false);
    }  }>
      <Text style={styles.text}>Take photo</Text>
    </TouchableOpacity>
  </View>
 </Camera>
-        ) : (<>hello</>)}
+</View>
+        ) : (
+        <View style= {{flex: 1}}>
+          
+          {image && (
+            <Image
+            style={{ width: "100%", height: '90%'}}
+             source={{uri: image}}/>
+          )}
+          <View style={{justifyContent: 'center', flexDirection: 'row', gap: 100, padding: 20}}>
+            <AppButton 
+                onPress={() => {
+                  setShowCamera(true);
+                } } disabled={false}>Take New Picture!</AppButton>
+                <AppButton 
+                onPress={() => {
+                  //setShowCamera(true);
+                  //Upload image
+                 navigation.navigate('UploadCar', {image})
+                } } disabled={false}>Use picture</AppButton>
+          </View>
+        </View>
+      )}
        
       </View>
+      </CustomSafeAreaView>
     );
   }
   
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      justifyContent: 'center',
+    },
+    cameraContainer: {
+      height: '100%',
+      width: '100%'
     },
     camera: {
       flex: 1,
+      borderRadius: 20,
     },
     buttonContainer: {
       flex: 1,

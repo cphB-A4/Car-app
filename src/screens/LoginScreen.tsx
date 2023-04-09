@@ -39,6 +39,26 @@ export default function LoginScreen() {
     setLoading(false)
   }
 
+  const styles = StyleSheet.create({
+    inputField: {
+      borderWidth: 1,
+      paddingTop: 8,
+      paddingBottom: 8,
+      borderRadius: 10,
+      padding: 10,
+      backgroundColor: colors.inputField
+    },
+    verticallySpaced: {
+      paddingTop: 8,
+      paddingBottom: 8,
+      alignSelf: 'stretch',
+    },
+    mt20: {
+      marginTop: 20,
+    },
+  })
+  
+
   return (
     <CustomSafeAreaView>
     <View  style={outerContainer.container}>
@@ -72,21 +92,4 @@ export default function LoginScreen() {
   )
 }
 
-const styles = StyleSheet.create({
-  inputField: {
-    borderWidth: 1,
-    paddingTop: 8,
-    paddingBottom: 8,
-    borderRadius: 10,
-    padding: 10,
-  },
-  verticallySpaced: {
-    paddingTop: 8,
-    paddingBottom: 8,
-    alignSelf: 'stretch',
-  },
-  mt20: {
-    marginTop: 20,
-  },
-})
 
