@@ -3,24 +3,31 @@ import { Image, Text, View, StyleSheet, TextInput, Alert, ScrollView} from 'reac
 import useThemeColors from '../hooks/useThemeColors';
 import { outerContainer } from '../themes/shared';
 import { CustomSafeAreaView } from '../utils/CustomSafeAreaView';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
 import { CameraStackParams, RootStackStackParams } from '../routes/types';
 import { motorAPI } from '../api/motorApi/motorAPI';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { MotorAPIResponse } from '../api/motorApi/types';
 import RegularText from '../components/Texts/RegularText';
 import SmallText from '../components/Texts/SmallText';
+import { supabase } from '../api/InitSupabse';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
+import { useUser } from '../contexts/UserContext';
+import { useNavigation } from '@react-navigation/native';
+
 
 type Props = StackScreenProps<CameraStackParams, 'UploadCar'>
 
-const UploadCarScreen = ({ route, navigation}: Props) => {
+const UploadCarScreen = ({ route}: Props) => {
   const { image } = route.params;
+  const navigation = useNavigation<StackNavigationProp<RootStackStackParams>>();
     const colors = useThemeColors();
     const [numberplate, setNumberplate] = useState('');
     const [searchReady, setSearchReady] = useState(false);
     const [car, setCar] = useState<MotorAPIResponse>();
+    const user = useUser();
     
-
     const getVehiclesByRegNumber = async () => {
       try {
         const regex = /^[A-Z]{2}\d{5}$/i;
@@ -28,9 +35,38 @@ const UploadCarScreen = ({ route, navigation}: Props) => {
           throw new Error('Invalid numberplate format');
         }
         const response = await motorAPI.getVehiclesByRegNumber(numberplate);
-        const { registration_number, total_weight, seats, coupling, doors, make, model, variant, model_type, model_year, color, chassis_type, engine_cylinders, engine_volume, engine_power, fuel_type }: MotorAPIResponse = response[0];
-        const vehicleData = { registration_number, total_weight, seats, coupling, doors, make, model, variant, model_type, model_year, color, chassis_type, engine_cylinders, engine_volume, engine_power, fuel_type };
-        setCar(vehicleData);
+        //Formdata
+        let formData = new FormData();
+        formData.append("files",{
+          uri: image,
+          name: image,
+          type : "image/jpg"
+        } as unknown as Blob) 
+
+        const {data, error} = await supabase.storage.from("image-bucket" + "/" + user.user?.id).upload(uuidv4(), formData);
+        
+        if(error) {
+          console.log(error)
+          throw new Error(error.message)
+          
+        } 
+        const { registration_number, total_weight, seats, coupling, doors, make, model, variant, model_year, color, engine_volume, engine_power, fuel_type }: MotorAPIResponse = response[0];
+        const vehicleData = { registration_number, total_weight, seats, coupling, doors, make, model, variant, model_year, color, engine_volume, engine_power, fuel_type };
+     //   setCar(vehicleData);
+     const vehicleDataWithProfile = { ...vehicleData, profile_id: user.user?.id, img_url: data.path };
+
+     const {data: tableData, error: tableError } = await supabase.from('cars').insert([vehicleDataWithProfile]).select();
+
+     if(tableError){
+      throw new Error(tableError.message)
+     }
+
+     if(tableData){
+      //W
+      navigation.navigate('Home');
+      Alert.alert('Successfully uploaded!')
+     }
+
       } catch (error) {
         const err = error as Error;
         Alert.alert(err.message)
