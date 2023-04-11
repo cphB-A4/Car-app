@@ -48,6 +48,7 @@ export interface Database {
           make: string | null
           model: string | null
           model_year: number | null
+          nickname: string | null
           profile_id: string | null
           registration_number: string | null
           seats: number | null
@@ -67,6 +68,7 @@ export interface Database {
           make?: string | null
           model?: string | null
           model_year?: number | null
+          nickname?: string | null
           profile_id?: string | null
           registration_number?: string | null
           seats?: number | null
@@ -86,6 +88,7 @@ export interface Database {
           make?: string | null
           model?: string | null
           model_year?: number | null
+          nickname?: string | null
           profile_id?: string | null
           registration_number?: string | null
           seats?: number | null

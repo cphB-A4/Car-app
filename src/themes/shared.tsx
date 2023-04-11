@@ -18,6 +18,6 @@ export const globalStyle = StyleSheet.create({
         color: '#008EDE'
     },
     font: {
-       // fontFamily: 'Inter-Black'
+        // fontFamily: 'Inter-Black'
     }
 });

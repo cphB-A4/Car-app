@@ -1,7 +1,7 @@
-import { ReactNode } from "react";
-import { StyleProp, TextStyle } from "react-native";
+import { ReactNode } from 'react';
+import { StyleProp, TextStyle } from 'react-native';
 
 export interface TextProps {
-  textStyles?: StyleProp<TextStyle>;
-  children?: ReactNode;
+    textStyles?: StyleProp<TextStyle>;
+    children?: ReactNode;
 }

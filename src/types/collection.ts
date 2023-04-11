@@ -1,3 +1,3 @@
-import { Database } from "./supabase";
+import { Database } from './supabase';
 
 export type CarType = Database['public']['Tables']['cars']['Row'];
