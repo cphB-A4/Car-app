@@ -23,6 +23,8 @@ import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 import { useUser } from '../contexts/UserContext';
 import { useNavigation } from '@react-navigation/native';
+import LoadingAnimation from '../components/LoadingAnimation';
+import { useAppSelector } from '../store/hooks';
 
 type Props = StackScreenProps<CameraStackParams, 'UploadCar'>;
 
@@ -35,9 +37,11 @@ const UploadCarScreen = ({ route }: Props) => {
     const [searchReady, setSearchReady] = useState(false);
     const [car, setCar] = useState<MotorAPIResponse>();
     const user = useUser();
+    const [loading, setLoading] = useState(false);
 
     const getVehiclesByRegNumber = async () => {
         try {
+            setLoading(true);
             const regex = /^[A-Z]{2}\d{5}$/i;
             if (!regex.test(numberplate)) {
                 throw new Error('Invalid numberplate format');
@@ -92,7 +96,11 @@ const UploadCarScreen = ({ route }: Props) => {
             const vehicleDataWithProfile = {
                 ...vehicleData,
                 profile_id: user.user?.id,
-                img_url: 'https://gfxtrcqmweyihhmyuzcl.supabase.co/storage/v1/object/public/image-bucket/' +user.user?.id +'/' + data.path,
+                img_url:
+                    'https://gfxtrcqmweyihhmyuzcl.supabase.co/storage/v1/object/public/image-bucket/' +
+                    user.user?.id +
+                    '/' +
+                    data.path,
                 nickname: make
             };
 
@@ -102,10 +110,12 @@ const UploadCarScreen = ({ route }: Props) => {
                 .select();
 
             if (tableError) {
+                setLoading(false);
                 throw new Error(tableError.message);
             }
 
             if (tableData) {
+                setLoading(false);
                 navigation.navigate('Home');
                 Alert.alert('Successfully uploaded!');
             }
@@ -157,6 +167,10 @@ const UploadCarScreen = ({ route }: Props) => {
             marginTop: 20
         }
     });
+
+    if (loading) {
+        return <LoadingAnimation />;
+    }
     return (
         <>
             <View style={[{ flex: 1, backgroundColor: colors.background }]}>
@@ -210,20 +224,6 @@ const UploadCarScreen = ({ route }: Props) => {
                                     name="check-circle-outline"
                                 />
                             )}
-                        </View>
-
-                        <View style={{ flexDirection: 'row' }}>
-                            <View style={{ flex: 1 }}>
-                                <SmallText textStyles={{ fontWeight: '600' }}>
-                                    REG NUMBER
-                                </SmallText>
-                            </View>
-                            <View style={{ flex: 1 }}>
-                                <TextInput
-                                    placeholder="Test"
-                                    style={{ justifyContent: 'flex-end' }}
-                                />
-                            </View>
                         </View>
                     </View>
                 </ScrollView>

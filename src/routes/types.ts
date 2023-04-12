@@ -6,6 +6,7 @@ export type RootStackStackParams = {
     Profile: undefined;
     CameraStack: NavigatorScreenParams<CameraStackParams>;
     Settings: undefined;
+    HomeStack: NavigatorScreenParams<HomeStackParams>;
 };
 
 export type AuthStackParams = {
@@ -17,5 +18,12 @@ export type CameraStackParams = {
     Camera: undefined;
     UploadCar: {
         image: any;
+    };
+};
+
+export type HomeStackParams = {
+    Home: undefined;
+    SingleCar: {
+        id: number;
     };
 };

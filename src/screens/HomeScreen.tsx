@@ -7,9 +7,10 @@ import {
     Alert,
     ScrollView,
     TouchableOpacity,
-    Image
+    Image,
+    FlatList
 } from 'react-native';
-import { RootStackStackParams } from '../routes/types';
+import { HomeStackParams, RootStackStackParams } from '../routes/types';
 import BigText from '../components/Texts/BigText';
 import SmallText from '../components/Texts/SmallText';
 import useThemeColors from '../hooks/useThemeColors';
@@ -27,20 +28,21 @@ import { useUser } from '../contexts/UserContext';
 import { supabase } from '../api/InitSupabse';
 import { CarType } from '../types/collection';
 import { kWToHP } from '../utils/helper';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import CarCard from '../components/CarCard';
 
-const HomeScreen = () => {
+type Props = NativeStackScreenProps<HomeStackParams, 'Home'>;
+const HomeScreen = ({ navigation }: Props) => {
     //NOTE: måske NativeStackNavigationProp
-    const navigation =
-        useNavigation<StackNavigationProp<RootStackStackParams>>();
+
     const colors = useThemeColors();
     const dispatch = useAppDispatch();
-    const viewState = useAppSelector((state) => state.viewState);
     const { user } = useUser();
-    const [imgUrls, setImgUrls] = useState<string[]>([]);
     const isFocused = useIsFocused(); //Used to reload the page if user uploads a photo
     const [cars, setCars] = useState<CarType[]>([]);
     const [maxHK, setMaxHk] = useState<number | null>(0);
     const [totalCars, setTotalCars] = useState<number | null>(0);
+    const [loading, setLoading] = useState(true);
 
     const getCars = async (userId: string) => {
         const { data, error } = await supabase
@@ -53,40 +55,41 @@ const HomeScreen = () => {
     };
 
     const getCarWithMostHK = async (userId: string) => {
-      const { data, error } = await supabase
-        .from('cars')
-        .select('*')
-        .eq('profile_id', userId)
-        .order('engine_power', { ascending: false })
-        .limit(1);
-      return { data, error };
+        const { data, error } = await supabase
+            .from('cars')
+            .select('*')
+            .eq('profile_id', userId)
+            .order('engine_power', { ascending: false })
+            .limit(1);
+        return { data, error };
     };
-    
 
     useEffect(() => {
         if (isFocused) {
             setLoading(true);
             if (user) {
-                getCars(user.id).then((cars) => {
-                    if (cars.data && cars.totalCars) {
-                        setCars(cars.data);
-                        setTotalCars(cars.totalCars)
-                        setLoading(false);
-                    }
-                }).catch((error) => {
-                  Alert.alert(error);
-                });
+                getCars(user.id)
+                    .then((cars) => {
+                        if (cars.data && cars.totalCars) {
+                            setCars(cars.data);
+                            setTotalCars(cars.totalCars);
+                            setLoading(false);
+                        }
+                    })
+                    .catch((error) => {
+                      setLoading(false);
+                        Alert.alert(error);
+                    });
                 getCarWithMostHK(user.id).then((car) => {
-                  if(car.data){
-                    setMaxHk(car.data[0].engine_power)
-                  }
-                
-                })
+                    if (car.data) {
+                        setMaxHk(car.data[0].engine_power);
+                    }
+                });
             }
         }
     }, [isFocused, user]);
 
-    if (viewState.loading) {
+    if (loading) {
         return <LoadingAnimation />;
     }
 
@@ -114,7 +117,9 @@ const HomeScreen = () => {
                                 return (
                                     <TouchableOpacity
                                         onPress={() => {
-                                            // navigation.navigate('SingleArticle', { postId: post.id });
+                                            navigation.push('SingleCar', {
+                                                id: car.id
+                                            });
                                         }}
                                         style={styles.touchableItems}
                                         key={car.id}
@@ -126,7 +131,7 @@ const HomeScreen = () => {
                                         <RegularText
                                             textStyles={styles.description}
                                         >
-                                           {car.nickname}
+                                            {car.nickname}
                                         </RegularText>
                                     </TouchableOpacity>
                                 );
@@ -152,7 +157,16 @@ const HomeScreen = () => {
                             </CustomText>
                         </View>
                     </View>
-                    <Heading>Your favourite cars</Heading>
+                    <View style={{ marginBottom: 20 }}>
+                        <Heading>Your favourite cars</Heading>
+                    </View>
+                    {cars.map((car) => {
+                        return (
+                            <View style={{ marginBottom: 20 }} key={car.id}>
+                                <CarCard car={car} />
+                            </View>
+                        );
+                    })}
                 </View>
             </ScrollView>
         </CustomSafeAreaView>

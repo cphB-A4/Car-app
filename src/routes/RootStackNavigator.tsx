@@ -9,13 +9,20 @@ import ProfileScreen from '../screens/ProfileScreen';
 import UploadCarScreen from '../screens/UploadCarScreen';
 import CameraScreen from '../screens/CameraScreen';
 import SettingsScreen from '../screens/SettingsScreen';
-import { CameraStackParams, RootStackStackParams } from './types';
+import {
+    CameraStackParams,
+    HomeStackParams,
+    RootStackStackParams
+} from './types';
 import { createStackNavigator } from '@react-navigation/stack';
+import SingleCarScreen from '../screens/SingleCarScreen';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 const RootStackNavigator = () => {
     const colors = useThemeColors();
     const Tab = createBottomTabNavigator<RootStackStackParams>();
     const CameraStack = createStackNavigator<CameraStackParams>();
+    const HomeStack = createStackNavigator<HomeStackParams>();
 
     const CameraScreenStack = () => {
         return (
@@ -34,6 +41,22 @@ const RootStackNavigator = () => {
         );
     };
 
+    const HomeScreenStack = () => {
+        return (
+            <HomeStack.Navigator initialRouteName="Home">
+                <HomeStack.Screen
+                    name="Home"
+                    component={HomeScreen}
+                    options={{ headerShown: false }}
+                />
+                <HomeStack.Screen
+                    name="SingleCar"
+                    component={SingleCarScreen}
+                />
+            </HomeStack.Navigator>
+        );
+    };
+
     return (
         <Tab.Navigator
             initialRouteName={'Home'}
@@ -48,6 +71,8 @@ const RootStackNavigator = () => {
             }}
         >
             <Tab.Screen
+                name="HomeStack"
+                component={HomeScreenStack}
                 options={{
                     tabBarLabel: 'Home',
                     tabBarIcon: ({ color, size }) => (
@@ -58,8 +83,6 @@ const RootStackNavigator = () => {
                         />
                     )
                 }}
-                name="Home"
-                component={HomeScreen}
             />
             <Tab.Screen
                 name="Profile"

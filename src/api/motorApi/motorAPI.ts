@@ -25,7 +25,7 @@ const getVehiclesByRegNumber = async (
 
     // check if responseData has any keys
     if (Object.keys(responseData).length === 0) {
-        throw new Error('No data found');
+        throw new Error('No cars with the given registration number found');
     }
 
     return responseData;
