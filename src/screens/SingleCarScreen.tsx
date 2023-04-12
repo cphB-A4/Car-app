@@ -25,12 +25,17 @@ import { kWToHP } from '../utils/helper';
 import Heading from '../components/Texts/Heading';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import RegularText from '../components/Texts/RegularText';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { setCar, updateFavourite } from '../store/slices/car';
 
 type Props = StackScreenProps<HomeStackParams, 'SingleCar'>;
 const SingleCarScreen = ({ route, navigation }: Props) => {
     const { id } = route.params;
     const colors = useThemeColors();
-    const [car, setCar] = useState<CarType | null>();
+    const dispatch = useAppDispatch();
+    const car = useAppSelector((state) => state.carState.car);
+
+    // const [car, setCar] = useState<CarType | null>();
     const { user } = useUser();
 
     const changeFavourite = async (userId: string, carId: number) => {
@@ -43,9 +48,7 @@ const SingleCarScreen = ({ route, navigation }: Props) => {
             Alert.alert('An error occured');
             return error;
         }
-        setCar((prevCar) =>
-            prevCar ? { ...prevCar, favourite: !prevCar.favourite } : null
-        );
+        dispatch(updateFavourite(!car?.favourite));
         return { data, error };
     };
 
@@ -97,7 +100,12 @@ const SingleCarScreen = ({ route, navigation }: Props) => {
                         </>
                     )}
 
-                    <Pressable style={styles.icon}>
+                    <Pressable
+                        onPress={() =>
+                            navigation.navigate('Edit', { id: car!.id })
+                        }
+                        style={styles.icon}
+                    >
                         <MaterialCommunityIcons
                             name="pencil-outline"
                             color={colors.text}
@@ -107,7 +115,7 @@ const SingleCarScreen = ({ route, navigation }: Props) => {
                 </View>
             )
         });
-    }, [car?.favourite]);
+    }, [car]);
 
     const getCarById = async (userId: string, carId: number) => {
         const { data, error } = await supabase
@@ -124,7 +132,7 @@ const SingleCarScreen = ({ route, navigation }: Props) => {
             getCarById(user.id, id)
                 .then((car) => {
                     if (car.data) {
-                        setCar(car.data[0]);
+                        dispatch(setCar(car.data[0]));
                         setLoading(false);
                     }
                 })

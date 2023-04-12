@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import viewSlice from './slices/view';
+import carSlice from './slices/car';
 
 export const store = configureStore({
     reducer: {
-        viewState: viewSlice
+        viewState: viewSlice,
+        carState: carSlice
     }
 });
 

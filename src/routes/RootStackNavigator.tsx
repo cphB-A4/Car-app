@@ -17,6 +17,9 @@ import {
 import { createStackNavigator } from '@react-navigation/stack';
 import SingleCarScreen from '../screens/SingleCarScreen';
 import { Pressable, StyleSheet, View } from 'react-native';
+import EditScreen from '../screens/EditScreen';
+import SmallText from '../components/Texts/SmallText';
+import AppButton from '../components/AppButton';
 
 const RootStackNavigator = () => {
     const colors = useThemeColors();
@@ -53,6 +56,7 @@ const RootStackNavigator = () => {
                     name="SingleCar"
                     component={SingleCarScreen}
                 />
+                <HomeStack.Screen name="Edit" component={EditScreen} />
             </HomeStack.Navigator>
         );
     };

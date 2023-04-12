@@ -77,7 +77,7 @@ const HomeScreen = ({ navigation }: Props) => {
                         }
                     })
                     .catch((error) => {
-                      setLoading(false);
+                        setLoading(false);
                         Alert.alert(error);
                     });
                 getCarWithMostHK(user.id).then((car) => {

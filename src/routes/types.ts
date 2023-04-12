@@ -23,6 +23,9 @@ export type CameraStackParams = {
 
 export type HomeStackParams = {
     Home: undefined;
+    Edit: {
+        id: number;
+    };
     SingleCar: {
         id: number;
     };
