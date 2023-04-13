@@ -6,24 +6,19 @@ import React from 'react';
 import useThemeColors from '../hooks/useThemeColors';
 
 interface SafeAreaViewProps {
-  children?: ReactNode;
+    children?: ReactNode;
 }
 
 export const CustomSafeAreaView = ({ children }: SafeAreaViewProps) => {
-  const colors = useThemeColors();
-  const insets = useSafeAreaInsets();
-  const styles = StyleSheet.create({
-    container: {
-      backgroundColor: colors.background,
-      flex: 1,
-      paddingBottom: insets.bottom,
-      paddingTop: insets.top
-    }
-  })
-  return (
-    <View style={styles.container}>
-      {children}
-    </View>
-  );
-
+    const colors = useThemeColors();
+    const insets = useSafeAreaInsets();
+    const styles = StyleSheet.create({
+        container: {
+            backgroundColor: colors.background,
+            flex: 1,
+            // paddingBottom: insets.bottom,
+            paddingTop: insets.top
+        }
+    });
+    return <View style={styles.container}>{children}</View>;
 };

@@ -8,9 +8,7 @@ const SignUpScreen = () => {
     const colors = useThemeColors();
     return (
         <CustomSafeAreaView>
-            <View
-                style={ outerContainer.container}
-            >
+            <View style={outerContainer.container}>
                 <Text style={{ color: colors.text }}>
                     Hello SignUp. We might not need this page!!
                 </Text>

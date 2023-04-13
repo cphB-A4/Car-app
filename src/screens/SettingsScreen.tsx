@@ -10,21 +10,21 @@ const SettingsScreen = () => {
     const colors = useThemeColors();
     return (
         <CustomSafeAreaView>
-            <View
-                style={ outerContainer.container}
-            >
+            <View style={outerContainer.container}>
                 <Text style={{ color: colors.text }}>
                     Hello SettingsScreen!!
                 </Text>
-                <AppButton disabled={false} onPress={async ()=> {
-                    const {error} = await supabase.auth.signOut()
-                    console.log(error);
-                }
-}>
-    Logout
-</AppButton>
+                <AppButton
+                    disabled={false}
+                    onPress={async () => {
+                        const { error } = await supabase.auth.signOut();
+                        console.log(error);
+                    }}
+                >
+                    Logout
+                </AppButton>
             </View>
-            </CustomSafeAreaView>
+        </CustomSafeAreaView>
     );
 };
 
