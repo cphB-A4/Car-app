@@ -5,10 +5,11 @@ import {
     View,
     StyleSheet,
     Button,
-    Image
+    Image,
+    ImageBackground
 } from 'react-native';
 import useThemeColors from '../hooks/useThemeColors';
-import { outerContainer } from '../themes/shared';
+import { ScreenWidth, outerContainer } from '../themes/shared';
 import { CustomSafeAreaView } from '../utils/CustomSafeAreaView';
 import { Camera, CameraType } from 'expo-camera';
 import SmallText from '../components/Texts/SmallText';
@@ -17,6 +18,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CameraStackParams, RootStackStackParams } from '../routes/types';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 type Props = NativeStackScreenProps<CameraStackParams, 'Camera'>;
 const CameraScreen = ({ navigation }: Props) => {
@@ -29,6 +31,12 @@ const CameraScreen = ({ navigation }: Props) => {
 
     //Camera ref to access camera
     const cameraRef = useRef<Camera>(null);
+
+    const [zoom, setZoom] = useState(0);
+
+    const handleZoomChange = (value: number) => {
+        setZoom(value);
+    };
 
     if (!permission) {
         // Camera permissions are still loading
@@ -76,35 +84,86 @@ const CameraScreen = ({ navigation }: Props) => {
                             type={type}
                             ref={cameraRef}
                         >
-                            <View style={styles.buttonContainer}>
-                                <TouchableOpacity
-                                    style={styles.button}
-                                    onPress={toggleCameraType}
-                                >
-                                    <Text style={styles.text}>Flip Camera</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={styles.button}
-                                    onPress={async () => {
-                                        const r = await takePhoto();
-                                        if (r) {
-                                            setImage(r.uri);
-                                        }
-                                        setShowCamera(false);
+                            <MaterialCommunityIcons
+                                style={{
+                                    position: 'absolute',
+                                    right: 20,
+                                    top: 20
+                                }}
+                                name="camera-flip-outline"
+                                color={'white'}
+                                size={26}
+                                onPress={toggleCameraType}
+                            />
+
+                            <TouchableOpacity
+                                style={{
+                                    height: 80,
+                                    width: 80,
+                                    borderRadius: 40,
+                                    borderColor: 'white',
+                                    borderWidth: 5,
+                                    position: 'absolute',
+                                    bottom: 30,
+                                    right: ScreenWidth / 2 - 40
+                                }}
+                                onPress={async () => {
+                                    const r = await takePhoto();
+                                    if (r) {
+                                        setImage(r.uri);
+                                    }
+                                    setShowCamera(false);
+                                }}
+                            >
+                                <View
+                                    style={{
+                                        flex: 1,
+                                        backgroundColor: 'transparent',
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
                                     }}
-                                >
-                                    <Text style={styles.text}>Take photo</Text>
-                                </TouchableOpacity>
-                            </View>
+                                ></View>
+                            </TouchableOpacity>
                         </Camera>
                     </View>
                 ) : (
-                    <View style={{ flex: 1 }}>
+                    <View>
                         {image && (
-                            <Image
-                                style={{ width: '100%', height: '90%' }}
-                                source={{ uri: image }}
-                            />
+                            <View style={{}}>
+                                <ImageBackground
+                                    style={{ width: '100%', height: '100%' }}
+                                    source={{ uri: image }}
+                                >
+                                    <MaterialCommunityIcons
+                                        style={{
+                                            position: 'absolute',
+                                            right: 20,
+                                            bottom: 60
+                                        }}
+                                        name="arrow-right-thin-circle-outline"
+                                        color={'white'}
+                                        size={45}
+                                        onPress={() => {
+                                            navigation.navigate('UploadCar', {
+                                                image
+                                            });
+                                        }}
+                                    />
+                                    <MaterialCommunityIcons
+                                        style={{
+                                            position: 'absolute',
+                                            left: 10,
+                                            top: 30
+                                        }}
+                                        name="close"
+                                        color={'white'}
+                                        size={45}
+                                        onPress={() => {
+                                            setShowCamera(true);
+                                        }}
+                                    />
+                                </ImageBackground>
+                            </View>
                         )}
                         <View
                             style={{
@@ -113,26 +172,7 @@ const CameraScreen = ({ navigation }: Props) => {
                                 gap: 100,
                                 padding: 20
                             }}
-                        >
-                            <AppButton
-                                onPress={() => {
-                                    setShowCamera(true);
-                                }}
-                                disabled={false}
-                            >
-                                Take New Picture!
-                            </AppButton>
-                            <AppButton
-                                onPress={() => {
-                                    //setShowCamera(true);
-                                    //Upload image
-                                    navigation.navigate('UploadCar', { image });
-                                }}
-                                disabled={false}
-                            >
-                                Use picture
-                            </AppButton>
-                        </View>
+                        ></View>
                     </View>
                 )}
             </View>
@@ -153,9 +193,8 @@ const styles = StyleSheet.create({
         borderRadius: 20
     },
     buttonContainer: {
-        flex: 1,
         flexDirection: 'row',
-        backgroundColor: 'transparent',
+        backgroundColor: 'red',
         margin: 64
     },
     button: {

@@ -40,6 +40,7 @@ const HomeScreen = ({ navigation }: Props) => {
     const { user } = useUser();
     const isFocused = useIsFocused(); //Used to reload the page if user uploads a photo
     const [cars, setCars] = useState<CarType[]>([]);
+    const [favCars, setFavCars] = useState<CarType[]>([]);
     const [maxHK, setMaxHk] = useState<number | null>(0);
     const [totalCars, setTotalCars] = useState<number | null>(0);
     const [loading, setLoading] = useState(true);
@@ -50,6 +51,15 @@ const HomeScreen = ({ navigation }: Props) => {
             .select('*')
             .eq('profile_id', userId)
             .eq('favourite', true)
+            .order('created_at', { ascending: false });
+        const totalCars = data?.length;
+        return { data, error, totalCars };
+    };
+    const getCars = async (userId: string) => {
+        const { data, error } = await supabase
+            .from('cars')
+            .select('*')
+            .eq('profile_id', userId)
             .order('created_at', { ascending: false });
         const totalCars = data?.length;
         return { data, error, totalCars };
@@ -69,10 +79,23 @@ const HomeScreen = ({ navigation }: Props) => {
         if (isFocused) {
             setLoading(true);
             if (user) {
-              getFavouriteCars(user.id)
+                getCars(user.id)
                     .then((cars) => {
                         if (cars.data && cars.totalCars) {
                             setCars(cars.data);
+                            setTotalCars(cars.totalCars);
+                            setLoading(false);
+                        }
+                    })
+                    .catch((error) => {
+                        setLoading(false);
+                        Alert.alert(error);
+                    });
+
+                getFavouriteCars(user.id)
+                    .then((cars) => {
+                        if (cars.data && cars.totalCars) {
+                            setFavCars(cars.data);
                             setTotalCars(cars.totalCars);
                             setLoading(false);
                         }
@@ -161,7 +184,7 @@ const HomeScreen = ({ navigation }: Props) => {
                     <View style={{ marginBottom: 20 }}>
                         <Heading>Your favourite cars</Heading>
                     </View>
-                    {cars.map((car) => {
+                    {favCars.map((car) => {
                         return (
                             <View style={{ marginBottom: 20 }} key={car.id}>
                                 <CarCard car={car} />

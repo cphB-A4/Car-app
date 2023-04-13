@@ -26,31 +26,32 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
                 style={styles.card}
             >
                 <View>
-                <Image style={styles.image} source={{ uri: car.img_url! }} />
-                <CustomText textStyles={styles.title}>
-                    {car.nickname ? car.nickname : car.make}
-                </CustomText>
-                <CustomText textStyles={styles.subtitle}>
-                    {car.variant}
-                </CustomText>
-               
-                                     {car?.favourite === true && user ? (
-                              
-                                    <MaterialCommunityIcons
-                                    style={{position: 'absolute', right: 10, top: 5}}
-                                        name="heart"
-                                        color={'red'}
-                                        size={24}
-                                    />
-                            ) : (
-                               
-                                    <MaterialCommunityIcons
-                style={{position: 'absolute', right: 10, top: 5}}
-                                        name="heart-outline"
-                                        color={colors.text}
-                                        size={24}
-                                    />
-                            )}
+                    <Image
+                        style={styles.image}
+                        source={{ uri: car.img_url! }}
+                    />
+                    <CustomText textStyles={styles.title}>
+                        {car.nickname ? car.nickname : car.make}
+                    </CustomText>
+                    <CustomText textStyles={styles.subtitle}>
+                        {car.variant}
+                    </CustomText>
+
+                    {car?.favourite === true && user ? (
+                        <MaterialCommunityIcons
+                            style={{ position: 'absolute', right: 10, top: 5 }}
+                            name="heart"
+                            color={'red'}
+                            size={24}
+                        />
+                    ) : (
+                        <MaterialCommunityIcons
+                            style={{ position: 'absolute', right: 10, top: 5 }}
+                            name="heart-outline"
+                            color={colors.text}
+                            size={24}
+                        />
+                    )}
                 </View>
                 <View style={styles.detailsContainer}>
                     <View>
