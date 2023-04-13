@@ -7,6 +7,9 @@ import { formatDate, kWToHP } from '../utils/helper';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { HomeStackParams, RootStackStackParams } from '../routes/types';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import useThemeColors from '../hooks/useThemeColors';
+import { useUser } from '../contexts/UserContext';
 
 interface CarCardProps {
     car: CarType;
@@ -14,12 +17,15 @@ interface CarCardProps {
 
 const CarCard: React.FC<CarCardProps> = ({ car }) => {
     const navigation = useNavigation<StackNavigationProp<HomeStackParams>>();
+    const colors = useThemeColors();
+    const { user } = useUser();
     return (
         <View>
             <Pressable
                 onPress={() => navigation.push('SingleCar', { id: car.id })}
                 style={styles.card}
             >
+                <View>
                 <Image style={styles.image} source={{ uri: car.img_url! }} />
                 <CustomText textStyles={styles.title}>
                     {car.nickname ? car.nickname : car.make}
@@ -27,6 +33,25 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
                 <CustomText textStyles={styles.subtitle}>
                     {car.variant}
                 </CustomText>
+               
+                                     {car?.favourite === true && user ? (
+                              
+                                    <MaterialCommunityIcons
+                                    style={{position: 'absolute', right: 10, top: 5}}
+                                        name="heart"
+                                        color={'red'}
+                                        size={24}
+                                    />
+                            ) : (
+                               
+                                    <MaterialCommunityIcons
+                style={{position: 'absolute', right: 10, top: 5}}
+                                        name="heart-outline"
+                                        color={colors.text}
+                                        size={24}
+                                    />
+                            )}
+                </View>
                 <View style={styles.detailsContainer}>
                     <View>
                         <CustomText

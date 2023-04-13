@@ -44,11 +44,12 @@ const HomeScreen = ({ navigation }: Props) => {
     const [totalCars, setTotalCars] = useState<number | null>(0);
     const [loading, setLoading] = useState(true);
 
-    const getCars = async (userId: string) => {
+    const getFavouriteCars = async (userId: string) => {
         const { data, error } = await supabase
             .from('cars')
             .select('*')
             .eq('profile_id', userId)
+            .eq('favourite', true)
             .order('created_at', { ascending: false });
         const totalCars = data?.length;
         return { data, error, totalCars };
@@ -68,7 +69,7 @@ const HomeScreen = ({ navigation }: Props) => {
         if (isFocused) {
             setLoading(true);
             if (user) {
-                getCars(user.id)
+              getFavouriteCars(user.id)
                     .then((cars) => {
                         if (cars.data && cars.totalCars) {
                             setCars(cars.data);
@@ -142,7 +143,7 @@ const HomeScreen = ({ navigation }: Props) => {
                     <View style={styles.statsContainer}>
                         <View style={styles.statContainer}>
                             <RegularText textStyles={{ fontWeight: '600' }}>
-                                Total:
+                                Total cars:
                             </RegularText>
                             <CustomText textStyles={styles.statsText}>
                                 {totalCars}
