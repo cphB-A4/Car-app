@@ -93,7 +93,6 @@ const HomeScreen = ({ navigation }: Props) => {
                     .then((cars) => {
                         if (cars.data && cars.totalCars) {
                             setFavCars(cars.data);
-                            setTotalCars(cars.totalCars);
                             setLoading(false);
                         }
                     })
