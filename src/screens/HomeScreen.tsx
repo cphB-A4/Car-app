@@ -1,5 +1,4 @@
-import { useIsFocused, useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { useIsFocused } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import {
     View,
@@ -10,7 +9,7 @@ import {
     Image,
     FlatList
 } from 'react-native';
-import { HomeStackParams, RootStackStackParams } from '../routes/types';
+import { HomeStackParams } from '../routes/types';
 import BigText from '../components/Texts/BigText';
 import SmallText from '../components/Texts/SmallText';
 import useThemeColors from '../hooks/useThemeColors';
@@ -22,8 +21,7 @@ import Heading from '../components/Texts/Heading';
 import React from 'react';
 import { CustomSafeAreaView } from '../utils/CustomSafeAreaView';
 import LoadingAnimation from '../components/LoadingAnimation';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { setLoading, setError, clearError } from '../store/slices/view';
+import { useAppDispatch } from '../store/hooks';
 import { useUser } from '../contexts/UserContext';
 import { supabase } from '../api/InitSupabse';
 import { CarType } from '../types/collection';
@@ -33,10 +31,8 @@ import CarCard from '../components/CarCard';
 
 type Props = NativeStackScreenProps<HomeStackParams, 'Home'>;
 const HomeScreen = ({ navigation }: Props) => {
-    //NOTE: måske NativeStackNavigationProp
 
     const colors = useThemeColors();
-    const dispatch = useAppDispatch();
     const { user } = useUser();
     const isFocused = useIsFocused(); //Used to reload the page if user uploads a photo
     const [cars, setCars] = useState<CarType[]>([]);
@@ -55,6 +51,7 @@ const HomeScreen = ({ navigation }: Props) => {
         const totalCars = data?.length;
         return { data, error, totalCars };
     };
+    
     const getCars = async (userId: string) => {
         const { data, error } = await supabase
             .from('cars')

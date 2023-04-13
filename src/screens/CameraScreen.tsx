@@ -9,13 +9,9 @@ import {
     ImageBackground
 } from 'react-native';
 import useThemeColors from '../hooks/useThemeColors';
-import { ScreenWidth, outerContainer } from '../themes/shared';
+import { ScreenWidth } from '../themes/shared';
 import { CustomSafeAreaView } from '../utils/CustomSafeAreaView';
 import { Camera, CameraType } from 'expo-camera';
-import SmallText from '../components/Texts/SmallText';
-import AppButton from '../components/AppButton';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { CameraStackParams, RootStackStackParams } from '../routes/types';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -23,7 +19,6 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 type Props = NativeStackScreenProps<CameraStackParams, 'Camera'>;
 const CameraScreen = ({ navigation }: Props) => {
     const colors = useThemeColors();
-    //const navigation = useNavigation<StackNavigationProp<RootStackStackParams>>();
     const [type, setType] = useState(CameraType.back);
     const [permission, requestPermission] = Camera.useCameraPermissions();
     const [showCamera, setShowCamera] = useState(true);
@@ -32,8 +27,8 @@ const CameraScreen = ({ navigation }: Props) => {
     //Camera ref to access camera
     const cameraRef = useRef<Camera>(null);
 
+    //TODO: make camera zoomable
     const [zoom, setZoom] = useState(0);
-
     const handleZoomChange = (value: number) => {
         setZoom(value);
     };
